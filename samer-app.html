@@ -9,7 +9,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../polymer/polymer.html">
-
+<link rel="import" href="../paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../paper-scroll-header-panel/paper-scroll-header-panel.html">
+<link rel="import" href="../paper-styles/typography.html">
+<link rel="import" href="../paper-toast/paper-toast.html">
+<link rel="import" href="../paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../iron-media-query/iron-media-query.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../iron-selector/iron-selector.html">
+<script src="../page/page.js"></script>
 <!--
 An element providing a solution to no problem in particular.
 
@@ -34,23 +46,136 @@ Example:
         display: block;
         box-sizing: border-box;
       }
-
-      .author img {
-        display: block;
-        float: left;
-        margin-right: 5px;
-        max-height: 100px;
-        max-width: 100px;
+      
+      paper-drawer-panel {
+          background-color: var(--header-background, white);
       }
+      
+      span.space {
+          @apply(--layout-flex);
+      }
+      
     </style>
+    
 
-    <h1>&lt;samer-app&gt;</h1>
-    <content></content>
-    <p class="author">
-      <img src$="{{author.image}}">
-      Cheers,<br/>
-      <span class="name">{{author.name}}</span>
-    </p>
+
+<span id="browser-sync-binding"></span>
+  <template is="dom-bind" id="app">
+
+    <paper-drawer-panel id="paperDrawerPanel">
+      <!-- Drawer Scroll Header Panel -->
+      <paper-scroll-header-panel drawer fixed>
+
+        <!-- Drawer Toolbar -->
+        <paper-toolbar id="drawerToolbar">
+          <span class="menu-name">Menu</span>
+        </paper-toolbar>
+
+        <!-- Drawer Content -->
+        <paper-menu attr-for-selected="data-route" selected="[[route]]">
+          <a data-route="home" href="{{baseUrl}}">
+            <iron-icon icon="home"></iron-icon>
+            <span>Home</span>
+          </a>
+
+          <a data-route="users" href="{{baseUrl}}users">
+            <iron-icon icon="info"></iron-icon>
+            <span>Users</span>
+          </a>
+
+          <a data-route="contact" href="{{baseUrl}}contact">
+            <iron-icon icon="mail"></iron-icon>
+            <span>Contact</span>
+          </a>
+        </paper-menu>
+      </paper-scroll-header-panel>
+
+      <!-- Main Area -->
+      <paper-scroll-header-panel main id="headerPanelMain" class="flex">
+        <!-- Main Toolbar -->
+        <paper-toolbar id="mainToolbar" >
+          <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
+          <div class="app-name">Polymer Starter Kit</div>
+          <span class="space"></span>
+
+          <!-- Toolbar icons -->
+          <paper-icon-button icon="refresh"></paper-icon-button>
+          <paper-icon-button icon="search"></paper-icon-button>
+
+        </paper-toolbar>
+
+        <!-- Main Content -->
+        <div class="content">
+          <iron-pages attr-for-selected="data-route" selected="{{route}}" id="content-pages">
+              
+            <content select="samer-route" id="routes-content"></content>
+              
+              <!--
+            <section data-route="home">
+              
+            </section>
+
+            <section data-route="users">
+              <paper-material elevation="1">
+                <h2 class="page-title">Users</h2>
+                <p>This is the users section</p>
+                <a href$="{{baseUrl}}users/Addy">Addy</a><br>
+                <a href$="{{baseUrl}}users/Rob">Rob</a><br>
+                <a href$="{{baseUrl}}users/Chuck">Chuck</a><br>
+                <a href$="{{baseUrl}}users/Sam">Sam</a>
+              </paper-material>
+            </section>
+
+            <section data-route="user-info">
+              <paper-material elevation="1">
+                <h2 class="page-title">User: {{params.name}}</h2>
+                <div>This is {{params.name}}'s section</div>
+              </paper-material>
+            </section>
+
+            <section data-route="contact">
+              <paper-material elevation="1">
+                <h2 class="page-title">Contact</h2>
+                <p>This is the contact section</p>
+              </paper-material>
+            </section>
+            
+            -->
+          </iron-pages>
+        </div>
+      </paper-scroll-header-panel>
+    </paper-drawer-panel>
+
+    <paper-toast id="toast">
+      <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
+    </paper-toast>
+
+    <!-- Uncomment next block to enable Service Worker support (1/2) -->
+    <!--
+    <paper-toast id="caching-complete"
+                 duration="6000"
+                 text="Caching complete! This app will work offline.">
+    </paper-toast>
+
+    <platinum-sw-register auto-register
+                          clients-claim
+                          skip-waiting
+                          base-uri="bower_components/platinum-sw/bootstrap"
+                          on-service-worker-installed="displayInstalledToast">
+      <platinum-sw-cache default-cache-strategy="fastest"
+                         cache-config-file="cache-config.json">
+      </platinum-sw-cache>
+    </platinum-sw-register>
+    -->
+
+  </template>
+
+  <!-- build:js scripts/app.js -->
+  <script src="js/app.js"></script>
+  <!-- endbuild-->
+
+
+
   </template>
 
   <script>
@@ -58,11 +183,6 @@ Example:
       is: 'samer-app',
 
       properties: {
-        /**
-         * `fancy` indicates that the element should don a monocle and tophat,
-         * while checking its pocket watch.
-         */
-        fancy: Boolean,
 
         /**
          * Describes the author of the element, but is really just an excuse to
@@ -72,22 +192,26 @@ Example:
          */
         author: {
           type: Object,
-          // Use `value` to provide a default value for a property, by setting it
-          // on your element's prototype.
-          //
-          // If you provide a function, as we do here, Polymer will call that
-          // _per element instance_.
-          //
-          // We do that to ensure that each element gets its own copy of the
-          // value, rather than having it shared across all instances (via the
-          // prototype).
           value: function() {
             return {
-              name:  'Dimitri Glazkov',
-              image: 'http://addyosmani.com/blog/wp-content/uploads/2013/04/unicorn.jpg',
+              name:  'Max',
+              email: 'max@example.com',
             };
           }
         },
+        
+        mainColor: {
+            type: String,
+            notify: true,
+        },
+        
+        errorRedirect: {
+            type: String,
+            value: function() {
+                return '/home';
+            }
+        }
+        
       },
 
       // Element Lifecycle
@@ -99,6 +223,105 @@ Example:
         //
         // This is the point where you should make modifications to the DOM (when
         // necessary), or kick off any processes the element wants to perform.
+        
+        var app = this.$.app;
+        var self = this;
+        
+        
+        // Scroll page to top and expand header
+        app.scrollPageToTop = function() {
+            app.$.headerPanelMain.scrollToTop(true);
+        };
+
+        app.closeDrawer = function() {
+            app.$.paperDrawerPanel.closeDrawer();
+        };
+        
+        window.addEventListener('paper-header-transform', function(e) {
+            var appName = Polymer.dom(document).querySelector('#mainToolbar .app-name');
+            var detail = e.detail;
+            var heightDiff = detail.height - detail.condensedHeight;
+
+            // appName max size when condensed. The smaller the number the smaller the condensed size.
+            var maxMiddleScale = 0.50;
+            var auxHeight = heightDiff - detail.y;
+            var auxScale = heightDiff / (1 - maxMiddleScale);
+            var scaleMiddle = Math.max(maxMiddleScale, auxHeight / auxScale + maxMiddleScale);
+
+
+
+            // Scale middleContainer appName
+            Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
+        });
+        window.addEventListener('WebComponentsReady', function() {
+            // Removes end / from app.baseUrl which page.base requires for production
+            if (window.location.port === '') {  // if production
+                page.base(app.baseUrl.replace(/\/$/, ''));
+            }
+
+            // Middleware
+            function scrollToTop(ctx, next) {
+            app.scrollPageToTop();
+                next();
+            }
+
+            function closeDrawer(ctx, next) {
+                app.closeDrawer();
+                next();
+            }
+
+            // Sets app default base URL
+            app.baseUrl = '/home';
+            app.baseUrl = this.errorRedirect;
+            if (window.location.port === '') {  // if production
+                // Uncomment app.baseURL below and
+                // set app.baseURL to '/your-pathname/' if running from folder in production
+                // app.baseUrl = '/polymer-starter-kit/';
+            }
+
+            // Routes
+            page('*', scrollToTop, closeDrawer, function(ctx, next) {
+                next();
+            });
+            
+            /*
+            var routes = self.queryAllEffectiveChildren('samer-route');
+        
+            for(var i = 0; i < routes.length; i++) {
+                
+                var r = routes[i];
+                
+                if(r != null) {
+                    
+                    var routeAttr = r.attributes.getNamedItem('route');
+                    var urlAttr = r.attributes.getNamedItem('url');
+                    
+                    (function(route, url) {
+                        page(url, function(data) {
+                            app.route = route;
+                            if(data != null) {
+                                app.params = data.params;
+                            }                                     
+                        });
+                    })(routeAttr.value, urlAttr.value);
+                }            
+            }
+            */
+            
+            // 404
+            page('*', function() {
+                app.$.toast.text = 'Can\'t find: ' + window.location.href  + '. Redirected you to Home Page';
+                console.warn('Can\'t find: ' + window.location.href  + '. Redirected you to Home Page');
+                app.$.toast.show();
+                page.redirect(app.baseUrl);
+            });
+
+            
+        });
+        
+        
+        
+        
       },
 
       attached: function() {
@@ -108,6 +331,10 @@ Example:
         // This is a good place to perform any work related to your element's
         // visual state or active behavior (measuring sizes, beginning animations,
         // loading resources, etc).
+        
+        
+        
+        
       },
 
       detached: function() {
@@ -119,33 +346,9 @@ Example:
 
       // Element Behavior
 
-      /**
-       * Sometimes it's just nice to say hi.
-       *
-       * @param {string} greeting A positive greeting.
-       * @return {string} The full greeting.
-       */
-      sayHello: function(greeting) {
-        var response = greeting || 'Hello World!';
-        return 'samer-app says, ' + response;
-      },
-
-      /**
-       * The `samer-app-lasers` event is fired whenever `fireLasers` is called.
-       *
-       * @event samer-app-lasers
-       * @detail {{sound: String}}
-       */
-
-      /**
-       * Attempt to destroy this element's enemies with a beam of light!
-       *
-       * Or, at least, dispatch an event in the vain hope that someone else will
-       * do the zapping.
-       */
-      fireLasers: function() {
-        this.fire('samer-app-lasers', {sound: 'Pew pew!'});
-      }
+     
     });
+    
+    
   </script>
 </dom-module>

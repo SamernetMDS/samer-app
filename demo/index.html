@@ -15,32 +15,58 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <title>samer-app Demo</title>
     <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
     <link rel="import" href="../samer-app.html">
+    <link rel="import" href="../samer-route.html">
+    <script>
+        
+        
+        window.addEventListener("WebComponentsReady", function(event) {
+            
+            app.baseUrl = '/home';
+            
+            page('/', function() {
+            app.route = 'home';
+            });
+
+            page('/home', function() {
+            app.route = 'home';
+            });
+            
+            page('/contact', function() {
+            app.route = 'contact';
+            });
+             
+            // start page framework and add #! before urls
+            page({
+                hashbang: true
+            });
+            
+            //page.redirect(page.current);
+            
+            
+        });
+    </script>
+        
   </head>
   <body unresolved>
 
     <p>An example of <code>&lt;samer-app&gt;</code>:</p>
 
-    <p>Make words! <button id="saybtn">Say Something</button></p>
-    <p>Make lasers! <button id="laserbtn">Fire lasers</button></p>
 
-    <samer-app author='{"name": "Lord Meowser", "image": "http://lorempixel.com/g/300/200/cats/"}' fancy>
-      <h2>Hello samer-app</h2>
+    <samer-app author='{"name": "Max", "email": "max@example.com"}' fancy>
+      <samer-route title="home" url="/home" route="home">
+        <h1>Home</h1>
+      </samer-route>
+      
+      <samer-route title="contact" url="/contact" route="contact">
+        <h1>Contact</h1>
+      </samer-route>
+      
     </samer-app>
 
     <script>
       var seedElement = document.querySelector('samer-app');
 
-      document.querySelector('#saybtn').addEventListener('click', function() {
-        alert(seedElement.sayHello('Hallo!'));
-      });
-
-      document.querySelector('#laserbtn').addEventListener('click', function() {
-        seedElement.fireLasers();
-      });
-
-      document.addEventListener("samer-app-lasers", function(e) {
-        console.log(e.detail.sound);
-      });
+      
 
     </script>
 
