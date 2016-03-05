@@ -22,7 +22,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../iron-pages/iron-pages.html">
 <link rel="import" href="../iron-selector/iron-selector.html">
 <link rel="import" href="js/routing.html">
-
 <!--
     
     <script src="../page/page.js"></script>
@@ -77,34 +76,30 @@ Example:
 
         <!-- Drawer Content -->
         <paper-menu attr-for-selected="data-route" selected="[[route]]">
-          <a data-route="home" href="{{baseUrl}}">
-            <iron-icon icon="home"></iron-icon>
-            <span>Home</span>
-          </a>
-
-          <a data-route="users" href="{{baseUrl}}users">
-            <iron-icon icon="info"></iron-icon>
-            <span>Users</span>
-          </a>
-
-          <a data-route="contact" href="{{baseUrl}}contact">
-            <iron-icon icon="mail"></iron-icon>
-            <span>Contact</span>
-          </a>
+            
+            <content select=".side-menu-item"></content>            
+<!--
+            <a data-route="contact" href="{{baseUrl}}impressum">
+                <iron-icon icon="mail"></iron-icon>
+                <span>Impressum</span>
+            </a>-->
         </paper-menu>
       </paper-scroll-header-panel>
 
       <!-- Main Area -->
-      <paper-scroll-header-panel main id="headerPanelMain" class="flex">
+      <paper-scroll-header-panel main id="headerPanelMain" class="flex" fixed>
         <!-- Main Toolbar -->
         <paper-toolbar id="mainToolbar" >
           <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
           <div class="app-name">Polymer Starter Kit</div>
           <span class="space"></span>
 
-          <!-- Toolbar icons -->
+          <!-- Toolbar icons
           <paper-icon-button icon="refresh"></paper-icon-button>
           <paper-icon-button icon="search"></paper-icon-button>
+          -->
+
+          <content select="paper-icon-button"></content>
 
         </paper-toolbar>
 
@@ -112,39 +107,8 @@ Example:
         <div class="content">
           <iron-pages attr-for-selected="data-route" selected="{{route}}" id="content-pages">
               
-            <content select="samer-route" id="routes-content"></content>
-              
-              <!--
-            <section data-route="home">
-              
-            </section>
-
-            <section data-route="users">
-              <paper-material elevation="1">
-                <h2 class="page-title">Users</h2>
-                <p>This is the users section</p>
-                <a href$="{{baseUrl}}users/Addy">Addy</a><br>
-                <a href$="{{baseUrl}}users/Rob">Rob</a><br>
-                <a href$="{{baseUrl}}users/Chuck">Chuck</a><br>
-                <a href$="{{baseUrl}}users/Sam">Sam</a>
-              </paper-material>
-            </section>
-
-            <section data-route="user-info">
-              <paper-material elevation="1">
-                <h2 class="page-title">User: {{params.name}}</h2>
-                <div>This is {{params.name}}'s section</div>
-              </paper-material>
-            </section>
-
-            <section data-route="contact">
-              <paper-material elevation="1">
-                <h2 class="page-title">Contact</h2>
-                <p>This is the contact section</p>
-              </paper-material>
-            </section>
+            <content select="samer-route" id="routes-content"></content>                      
             
-            -->
           </iron-pages>
         </div>
       </paper-scroll-header-panel>
