@@ -21,8 +21,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
 <link rel="import" href="../iron-selector/iron-selector.html">
-<script src="../page/page.js"></script>
+<link rel="import" href="js/routing.html">
+
 <!--
+    
+    <script src="../page/page.js"></script>
+    
 An element providing a solution to no problem in particular.
 
 Example:
@@ -254,59 +258,10 @@ Example:
             Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
         });
         window.addEventListener('WebComponentsReady', function() {
-            // Removes end / from app.baseUrl which page.base requires for production
-            if (window.location.port === '') {  // if production
-                page.base(app.baseUrl.replace(/\/$/, ''));
-            }
-
-            // Middleware
-            function scrollToTop(ctx, next) {
-            app.scrollPageToTop();
-                next();
-            }
-
-            function closeDrawer(ctx, next) {
-                app.closeDrawer();
-                next();
-            }
-
-            // Sets app default base URL
-            app.baseUrl = '/home';
-            app.baseUrl = this.errorRedirect;
-            if (window.location.port === '') {  // if production
-                // Uncomment app.baseURL below and
-                // set app.baseURL to '/your-pathname/' if running from folder in production
-                // app.baseUrl = '/polymer-starter-kit/';
-            }
-
-            // Routes
-            page('*', scrollToTop, closeDrawer, function(ctx, next) {
-                next();
-            });
             
-            /*
-            var routes = self.queryAllEffectiveChildren('samer-route');
-        
-            for(var i = 0; i < routes.length; i++) {
-                
-                var r = routes[i];
-                
-                if(r != null) {
-                    
-                    var routeAttr = r.attributes.getNamedItem('route');
-                    var urlAttr = r.attributes.getNamedItem('url');
-                    
-                    (function(route, url) {
-                        page(url, function(data) {
-                            app.route = route;
-                            if(data != null) {
-                                app.params = data.params;
-                            }                                     
-                        });
-                    })(routeAttr.value, urlAttr.value);
-                }            
-            }
-            */
+            app.baseUrl = this.errorRedirect;
+            
+            routing_middleware(app);
             
             // 404
             page('*', function() {

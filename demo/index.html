@@ -18,32 +18,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <link rel="import" href="../samer-route.html">
     <script>
         
-        
-        window.addEventListener("WebComponentsReady", function(event) {
-            
-            app.baseUrl = '/home';
-            
-            page('/', function() {
-            app.route = 'home';
-            });
-
-            page('/home', function() {
-            app.route = 'home';
-            });
-            
-            page('/contact', function() {
-            app.route = 'contact';
-            });
-             
-            // start page framework and add #! before urls
-            page({
-                hashbang: true
-            });
-            
-            //page.redirect(page.current);
-            
-            
-        });
     </script>
         
   </head>

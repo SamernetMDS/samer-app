@@ -19,6 +19,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 var routing_middleware = function(app) {
 
+    app.baseUrl = "/";
+
     // Removes end / from app.baseUrl which page.base requires for production
     if (window.location.port === '') {  // if production
       page.base(app.baseUrl.replace(/\/$/, ''));
@@ -43,29 +45,21 @@ var routing_middleware = function(app) {
     page('/', function() {
       app.route = 'home';
     });
+    
+    page('/home', function() {
+      app.route = 'home';
+    });
 
     page(app.baseUrl, function() {
       app.route = 'home';
     });
 
-    page('/users', function() {
-      app.route = 'users';
-    });
-
-    page('/users/:name', function(data) {
-      app.route = 'user-info';
-      app.params = data.params;
-    });
-
-    page('/contact', function() {
-      app.route = 'contact';
-    });
 
     // 404
     page('*', function() {
       app.$.toast.text = 'Can\'t find: ' + window.location.href  + '. Redirected you to Home Page';
       app.$.toast.show();
-      page.redirect(app.baseUrl);
+      page.redirect('/home');
     });
 
     // add #! before urls
