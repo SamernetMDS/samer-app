@@ -25,7 +25,7 @@ var routing_middleware = function(app) {
     if (window.location.port === '') {  // if production
       page.base(app.baseUrl.replace(/\/$/, ''));
     }
-
+    /*
     // Middleware
     function scrollToTop(ctx, next) {
       app.scrollPageToTop();
@@ -35,10 +35,10 @@ var routing_middleware = function(app) {
     function closeDrawer(ctx, next) {
       app.closeDrawer();
       next();
-    }
+    }*/
 
     // Routes
-    page('*', scrollToTop, closeDrawer, function(ctx, next) {
+    page('*', function(ctx, next) {
       next();
     });
 
