@@ -130,19 +130,22 @@ Example:
                 <content select=".sidebar"></content>
               </div>
           </paper-header-panel>
-          <paper-header-panel main>
-              <template is="dom-if" if="{{!wide_screen}}">
-                <paper-toolbar class="layout horizontal">
-                        <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
-                        <span class="flex sidebar-opened">{{appTitle}}</span>
-                        <content select=".toolbar"></content>
-                  </paper-toolbar>
+            <div main>
+                  <paper-header-panel>
+                      <template is="dom-if" if="{{!wide_screen}}">
+                        <paper-toolbar class="layout horizontal">
+                                <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+                                <span class="flex sidebar-opened">{{appTitle}}</span>
+                                <content select=".toolbar"></content>
+                          </paper-toolbar>
 
-              </template>
-              <div>
-                <content select=".body"></content>
-              </div>
-          </paper-header-panel>
+                      </template>
+
+                  </paper-header-panel>
+                <div>
+                    <content select=".body"></content>
+                  </div>
+            </div>
         </paper-drawer-panel>
 
 
