@@ -16,10 +16,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../paper-toast/paper-toast.html">
 <link rel="import" href="../paper-toolbar/paper-toolbar.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../paper-drawer-panel/paper-drawer-panel.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../iron-collapse/iron-collapse.html">
+<link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="../iron-selector/iron-selector.html">
 <link rel="import" href="../header-bar/header-bar.html">
 <link rel="import" href="js/routing.html">
@@ -50,16 +54,13 @@ Example:
 
 <dom-module id="samer-app">
   <template>
+      <style is="custom-style" include="iron-flex iron-flex-alignment iron-position">
     <style>
-      :host {
-        display: block;
-        box-sizing: border-box;
-      }
       
       
       
       span.space {
-          @apply(--layout-flex);
+
       }
       
       header-bar {
@@ -68,51 +69,83 @@ Example:
       }
 
 
+
+        :host {
+            @apply(--layout-vertical);
+            height: 100%;
+            width: 100%;
+        }
+
+        .sidebar {
+            width: 300px;
+
+        }
+
+
+        .sidebar-opened {
+            width: 300px !important;
+
+
+        }
+
+
+          .sidebar-opened.main {
+            background-color: rgba(0, 73, 105, 0.55);
+            background-color: var(--header-bar-nav-background--color, #0075a8);
+            background-color: #fff;
+            border-right: #ccc;
+            box-shadow: 0px 2px 2px 2px #aaa;
+          }
       
+
+          #s-app {
+              position: absolute;
+              width: 100%;
+              height: 100%;
+          }
+
+          #content {
+              margin-top: 50px;
+
+          }
+
     </style>
     
 
 
 <span id="browser-sync-binding"></span>
-  <template is="dom-bind" id="app">
+  <!--<template is="dom-bind" id="app">-->
 
-        <header-bar id="header" title="{{appTitle}}">
-            <content id="nav" select="nav"></content>
-            <content id="sub-headers" select="header.sub-header"></content>
-        </header-bar>
+      <iron-media-query query="(max-width: 600px)" query-matches="{{mobile_query}}"></iron-media-query>
+      <iron-media-query query="(min-width: 600px) and (max-width: 800px)" query-matches="{{tablet_query}}" full></iron-media-query>
+      <iron-media-query query="(min-width: 800px)" query-matches="{{wide_screen}}" ></iron-media-query>
 
-        <!-- Main Content -->
-        <div class="content">
-          <iron-pages attr-for-selected="data-route" selected="{{route}}" id="content-pages">
-              
-            <content select="samer-route" id="routes-content"></content>                      
-            
-          </iron-pages>
-        </div>
 
-    <paper-toast id="toast">
-      <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
-    </paper-toast>
+        <paper-drawer-panel force-narrow>
+          <paper-header-panel drawer>
+            <paper-toolbar>
+                <content select=".sidebar-header"></content>
+              </paper-toolbar>
+            <div>
+                <content select=".sidebar"></content>
+              </div>
+          </paper-header-panel>
+          <paper-header-panel main>
+              <template is="dom-if" if="{{!wide_screen}}">
+                <paper-toolbar class="layout horizontal">
+                        <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+                        <span class="flex sidebar-opened">{{appTitle}}</span>
+                        <content select=".toolbar"></content>
+                  </paper-toolbar>
 
-    <!-- Uncomment next block to enable Service Worker support (1/2) -->
-    <!--
-    <paper-toast id="caching-complete"
-                 duration="6000"
-                 text="Caching complete! This app will work offline.">
-    </paper-toast>
+              </template>
+              <div>
+                <content select=".body"></content>
+              </div>
+          </paper-header-panel>
+        </paper-drawer-panel>
 
-    <platinum-sw-register auto-register
-                          clients-claim
-                          skip-waiting
-                          base-uri="bower_components/platinum-sw/bootstrap"
-                          on-service-worker-installed="displayInstalledToast">
-      <platinum-sw-cache default-cache-strategy="fastest"
-                         cache-config-file="cache-config.json">
-      </platinum-sw-cache>
-    </platinum-sw-register>
-    -->
 
-  </template>
 
   <!-- build:js scripts/app.js -->
   <script src="js/app.js"></script>
@@ -126,12 +159,13 @@ Example:
     Polymer({
       is: 'samer-app',
 
+
       properties: {
 
          appTitle: {
             type: String,
             value: function() {                
-                return window.document.title;
+                return "Samer App";
             }
         },
 
@@ -139,15 +173,10 @@ Example:
           type: Object,
           value: function() {
             return {
-              name:  'Max',
-              email: 'max@example.com',
+              name:  'Samernet MDS',
+              email: 'info@samernetmds.com',
             };
           }
-        },
-        
-        mainColor: {
-            type: String,
-            notify: true,
         },
         
         errorRedirect: {
@@ -159,8 +188,12 @@ Example:
         
       },
 
+
+
+
       // Element Lifecycle
 
+/*
       ready: function() {
         // `ready` is called after all elements have been configured, but
         // propagates bottom-up. This element's children are ready, but parents
@@ -195,28 +228,18 @@ Example:
         
       },
 
-      attached: function() {
-        // `attached` fires once the element and its parents have been inserted
-        // into a document.
-        //
-        // This is a good place to perform any work related to your element's
-        // visual state or active behavior (measuring sizes, beginning animations,
-        // loading resources, etc).
-        
-        
-        
-        
-      },
-
-      detached: function() {
-        // The analog to `attached`, `detached` fires when the element has been
-        // removed from a document.
-        //
-        // Use this to clean up anything you did in `attached`.
-      },
-
+*/
       // Element Behavior
 
+        _togglesidemenu: function() {
+            console.log('whoa');
+
+            var sidebars = this.querySelectorAll('.sidebar');
+            for(var i = 0; i < sidebars.length; i++) {
+                sidebars[i].toggle();
+            }
+
+        }
      
     });
     
