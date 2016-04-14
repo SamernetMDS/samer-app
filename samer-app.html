@@ -84,9 +84,14 @@ Example:
                 <div class="paper-header">
                   <template is="dom-if" if="{{!wide_screen}}">
                     <paper-toolbar class="layout horizontal">
-                            <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
-                            <span class="flex sidebar-opened">{{appTitle}}</span>
-                            <content select=".toolbar"></content>
+                        <div class="layout horizontal center">
+                                <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+                                <span>{{appTitle}}</span>
+                                <span class="flex"></span>
+                                <div class="layout horizontal center">
+                                    <content select=".toolbar"></content>
+                                    </div>
+                            </div>
                       </paper-toolbar>
 
                   </template>
@@ -147,6 +152,11 @@ Example:
 
       // Element Lifecycle
 
+        
+        
+        
+        
+        
 /*
       ready: function() {
         // `ready` is called after all elements have been configured, but
@@ -185,15 +195,7 @@ Example:
 */
       // Element Behavior
 
-        _togglesidemenu: function() {
-            console.log('whoa');
 
-            var sidebars = this.querySelectorAll('.sidebar');
-            for(var i = 0; i < sidebars.length; i++) {
-                sidebars[i].toggle();
-            }
-
-        }
      
     });
     
